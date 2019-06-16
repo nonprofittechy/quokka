@@ -2,4 +2,11 @@
     <string name="app_name">Quokka Anagrammer</string>
     <string name="edit_message">Enter a word to anagram</string>
     <string name="button_send">List anagrams</string>
+    
+    <string-array name="Dictionaries">
+        <item>ospd.txt</item>
+        <item>WJ3.txt</item>
+        <item>test.txt</item>
+    </string-array>
+    
 </resources>

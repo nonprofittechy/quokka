@@ -5,8 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class DisplayMessageActivity extends AppCompatActivity {
 
@@ -22,13 +27,29 @@ public class DisplayMessageActivity extends AppCompatActivity {
         // Capture the layout's TextView and set the string as its text
         TextView textView = findViewById(R.id.textView);
 
-        Permutation permutation = new Permutation();
-        int n = message.length();
+        // Permutation permutation = new Permutation();
+        // ArrayList<String> results = permutation.permute(message);
 
-/*        HashSet<String> results = this.getAnagrams(message);
-*/
-        // HashSet<String> results = ["A","B"]; // FIXME
-        HashSet<String> results = permutation.permute(message, 0, n-1, new HashSet<String>());
+        BufferedReader reader;
+        GADDAG g = new GADDAG();
+
+        try {
+            // get input stream for text
+            InputStream is = getAssets().open("ospd.txt");
+
+            BufferedReader input = new BufferedReader(new InputStreamReader(is));
+            String line = "";
+            while ((line = input.readLine()) != null) {
+                g.add(line);
+            }
+        }
+        catch (Exception e) {
+            e.getMessage();
+        }
+
+        int length = message.length();
+
+        HashSet<String> results = g.findWordsFromString(message, length, length);
 
         StringBuilder sb = new StringBuilder();
 
@@ -37,46 +58,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
             sb.append("\r\n");
         }
 
-        textView.setText(sb.toString());
+         textView.setText(sb.toString());
 
     }
-/*
-    public HashSet<String> getAnagrams(String word) {
-        char[] charArray;
-        charArray = word.toCharArray();
-
-        HashSet<String> results = new HashSet<String>();
-
-        return _makeAnagrams("", word, results);
-
-    }
-*/
-/*
-    private HashSet<String> _makeAnagrams(String perm, String word, HashSet<String> res) {
-        if (word.isEmpty()) {
-            res.add(perm + word);
-        } else {
-            for (int i = 0; i < word.length(); i++) {
-                _makeAnagrams(perm + word.charAt(i), word.substring(0, i)
-                        + word.substring(i + 1, word.length()), res);
-            }
-        }
-
-        return res;
-    }
-*/
-
-/*    public HashSet<String> _makeAnagrams(String str1,String str2){
-        if(str2.length() > 1){
-            char ch = str2.charAt(0);
-            for(int i = 0; i <= str1.length();i++)
-                permut(str1.substring(0,i) + ch + str1.substring(i,str1.length()),
-                        str2.substring(1,str2.length()));
-        }else{
-            char ch = str2.charAt(0);
-            for(int i = 0; i <= str1.length();i++)
-                System.out.println(str1.substring(0,i) + ch +    str1.substring(i,str1.length()),
-                        str2.substring(1,str2.length()));
-        }
-    }*/
 }

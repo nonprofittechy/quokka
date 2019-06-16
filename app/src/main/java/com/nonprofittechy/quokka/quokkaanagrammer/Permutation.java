@@ -1,63 +1,71 @@
 package com.nonprofittechy.quokka.quokkaanagrammer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
-// Java program to print all permutations of a
+// Java program to return all unique permutations of a
 // given string.
 public class Permutation
 {
-    /*
-    public static void main(String[] args)
-    {
-        String str = "ABC";
-        int n = str.length();
-        Permutation permutation = new Permutation();
-        permutation.permute(str, 0, n-1, HashSet<String> res);
-    }
-    */
+    private ArrayList<String> anagrams = new ArrayList<String>();
 
     /**
-     * permutation function
-     * @param str string to calculate permutation for
-     * @param l starting index
-     * @param r end index
+     * Generate an ArrayList of permutations of a given string
+     * @param str String to anagram
+     * @return list of unique permutations of the string
      */
-    public HashSet<String> permute(String str, int l, int r, HashSet res)
-    {
-        if (l == r)
-            res.add(str);
-            // System.out.println(str);
-        else
-        {
-            for (int i = l; i <= r; i++)
-            {
-                str = swap(str,l,i);
-                permute(str, l+1, r, res);
-                str = swap(str,l,i);
-            }
+    public ArrayList<String> permute(String str) {
+        this.anagrams.clear();
+
+        char[] chars = str.toCharArray();
+
+        Arrays.sort(chars);
+
+        do {
+            this.anagrams.add(String.valueOf(chars));
+        } while (nextPermutation(chars)); // Java passes array by reference
+
+        return anagrams;
+    }
+
+    // See: https://www.nayuki.io/page/next-lexicographical-permutation-algorithm
+    private boolean nextPermutation(char[] array) {
+        // Find longest non-increasing suffix
+        int i = array.length - 1;
+        while (i > 0 && array[i - 1] >= array[i])
+            i--;
+        // Now i is the head index of the suffix
+
+        // Are we at the last permutation already?
+        if (i <= 0)
+            return false;
+
+        // Let array[i - 1] be the pivot
+        // Find rightmost element that exceeds the pivot
+        int j = array.length - 1;
+        while (array[j] <= array[i - 1])
+            j--;
+        // Now the value array[j] will become the new pivot
+        // Assertion: j >= i
+
+        // Swap the pivot with j
+        char temp = array[i - 1];
+        array[i - 1] = array[j];
+        array[j] = temp;
+
+        // Reverse the suffix
+        j = array.length - 1;
+        while (i < j) {
+            temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+            i++;
+            j--;
         }
 
-        return res;
+        // Successfully computed the next permutation
+        return true;
     }
-
-    /**
-     * Swap Characters at position
-     * @param a string value
-     * @param i position 1
-     * @param j position 2
-     * @return swapped string
-     */
-    public String swap(String a, int i, int j)
-    {
-        char temp;
-        char[] charArray = a.toCharArray();
-        temp = charArray[i] ;
-        charArray[i] = charArray[j];
-        charArray[j] = temp;
-        return String.valueOf(charArray);
-    }
-
 }
-
-// This code is contributed by Mihir Joshi
-
